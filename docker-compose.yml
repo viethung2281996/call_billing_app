@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+    app:
+        image: call_billing_app:latest
+        entrypoint: bin/start_app.sh
+        ports:
+            - "5000:5000"
+        environment:
+            FLASK_APP: app
+            FLASK_ENV: product
+            ENV_PREFIX_FOR_DYNACONF: product
+        depends_on:
+            - postgresql
+        restart: always
+
+    postgresql:
+        image: postgres:12.3
+        expose:
+            - "5432"
+        environment:
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: admin123
+            POSTGRES_DB: call_billing
+        volumes:
+            - ./postgresql:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 5s
+            timeout: 5s
+            retries: 10

@@ -1,0 +1,4 @@
+[flake8]
+ignore = S1192
+max-line-length = 120
+exclude = migrations,__pycache__
